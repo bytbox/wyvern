@@ -1,11 +1,13 @@
 ; Boot loader for wyvern
 
+;;;;;;;;;;;;;
+;; STAGE 1 ;;
+;;;;;;;;;;;;;
+
 [bits 16]
 [org 0x7c00]
 
 cli
-
-call	Progress
 
 ; Assume we're using the first hard disk
 mov	dl, 0x80
@@ -20,32 +22,31 @@ sub	si, 18
 
 mov	ah, 0x42
 int	0x13
-jc	Error
+jc	_Error
 
 jmp	0:0x1000
 
-hlt
-
-;; print a '.' to the screen
-;; Modifies ax, bx
-Progress:
-mov	al, '.'
-call	PrintCharacter
-ret
-
-;; print a single character to the screen from al
-;; modifies ah, bx
-PrintCharacter:
+_Error:
+mov	si, 0
+.1:
+mov	al, [_errmsg + si]
 mov	ah, 0x0e
 mov	bh, 0x00
 mov	bl, 0x07
 int	0x10
-ret
-
-Error:
-mov	al, '!'
-call	PrintCharacter
+inc	si
+mov	al, [_errmsg + si]
+cmp	al, 0
+jnz	.1
 hlt
+
+_errmsg:	db 'Stage 1 bootloader error'
+		db 10
+		db 13
+		db 'Halting'
+		db 10
+		db 13
+		db 0
 
 times	512 - 16 - 2 - ($ - $$) db 0
 
@@ -59,12 +60,17 @@ dq	0x0001	; where to start reading
 
 dw	0xaa55
 
-mov	al, '.'
+
+;;;;;;;;;;;;;
+;; STAGE 2 ;;
+;;;;;;;;;;;;;
+
+mov	al, '>'
 mov	ah, 0x0e
 mov	bh, 0x00
 mov	bl, 0x07
 int	0x10
 
-; force completion of the sector
-times	512 db 0
+; force another 7 sectors
+times	8*512 - ($ - $$) db 0
 
