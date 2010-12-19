@@ -51,6 +51,7 @@ _errmsg:	db 'Stage 1 bootloader error'
 times	512 - 16 - 2 - ($ - $$) db 0
 
 ; The DAP: Data Address Packet
+; This describes where to read stage 2 from
 db	0x10	; size of DAP
 db	0x00	; unused
 dw	0x01	; number of sectors to read
@@ -59,18 +60,4 @@ dw	0x0000	; segment of destination buffer
 dq	0x0001	; where to start reading
 
 dw	0xaa55
-
-
-;;;;;;;;;;;;;
-;; STAGE 2 ;;
-;;;;;;;;;;;;;
-
-mov	al, '>'
-mov	ah, 0x0e
-mov	bh, 0x00
-mov	bl, 0x07
-int	0x10
-
-; force another 7 sectors
-times	8*512 - ($ - $$) db 0
 
