@@ -7,13 +7,12 @@ cli
 
 call	Progress
 
-mov     ax, 0x07c0
-mov     ds, ax
-mov     es, ax
-mov     fs, ax
-mov     gs, ax
+;mov     ax, 0x07c0
+;mov     ds, ax
+;mov     es, ax
+;mov     fs, ax
+;mov     gs, ax
 
-; attempt to read a single byte
 ; Assume we're using the first hard disk
 mov	dl, 0x80
 
@@ -21,22 +20,26 @@ mov	dl, 0x80
 mov	ah, 0x00
 int	0x13
 
-; read a single sector
-mov	ah, 0x02
-mov	al, 0x01	; number of sectors
-mov	ch, 0x00	; track
-mov	cl, 0x00	; sector
-mov	dh, 0x00	; head
-			; disk is already set
-mov	ax, 0x0000
-mov	es, ax
-mov	bx, 0x0000
-int	0x13
-jc	Error
+;mov	di, 512
+;a:
+;mov	al, [0x7c00 + di]
+;call	PrintCharacter
+;dec	di
+;jnz	a
 
-mov	al, [0x1000]
+mov	si, 0x7c00
+add	si, 0x0200
+sub	si, 18
+
+call	PrintCharacter
+mov	ah, 0x42
+int	0x13
+
+mov	al, ah
 add	al, '0'
 call	PrintCharacter
+
+jc	Error
 
 call	Progress
 hlt
@@ -60,8 +63,20 @@ ret
 Error:
 mov	al, '!'
 call	PrintCharacter
-ret
+hlt
 
-times	510 - ($ - $$) db 0
+times	512 - 16 - 2 - ($ - $$) db 0
+
+; The DAP: Data Address Packet
+db	0x10	; size of DAP
+db	0x00	; unused
+db	0x01	; number of sectors to read
+db	0x00	; unused
+dw	0x1000	; offset of destination buffer
+dw	0x0000	; segment of destination buffer
+dw	0x0000
+dw	0x0000
+dw	0x0000
+dw	0x0001	; where to start reading
 dw	0xaa55
 
