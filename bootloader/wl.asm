@@ -22,11 +22,7 @@ mov	ah, 0x42
 int	0x13
 jc	Error
 
-mov	al, [0x1000]
-add	al, '0'
-call	PrintCharacter
-
-call	Progress
+jmp	0:0x1000
 
 hlt
 
@@ -63,7 +59,11 @@ dq	0x0001	; where to start reading
 
 dw	0xaa55
 
-call	Progress
+mov	al, '.'
+mov	ah, 0x0e
+mov	bh, 0x00
+mov	bl, 0x07
+int	0x10
 
 ; force completion of the sector
 times	512 db 0
