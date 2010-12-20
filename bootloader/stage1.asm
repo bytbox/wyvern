@@ -7,8 +7,11 @@
 [bits	16]
 [org	0x7c00]
 
+; set up memory
 mov	ax, 0
 mov	ds, ax
+; we don't need very much stack space
+mov	esp, 0x7f00
 
 ; Assume we're using the first hard disk
 mov	dl, 0x80
