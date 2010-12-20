@@ -7,7 +7,8 @@
 [bits	16]
 [org	0x7c00]
 
-cli
+mov	ax, 0
+mov	ds, ax
 
 ; Assume we're using the first hard disk
 mov	dl, 0x80
@@ -16,9 +17,7 @@ mov	dl, 0x80
 mov	ah, 0x00
 int	0x13
 
-mov	si, 0x7c00
-add	si, 0x0200
-sub	si, 18
+mov	si, dap
 
 mov	ah, 0x42
 int	0x13
@@ -55,7 +54,7 @@ inc     si
 mov     al, [_haltmsg + si]
 cmp     al, 0
 jnz     .2
-
+cli
 hlt
 
 ; Print a single character from al
@@ -80,6 +79,7 @@ times	512 - 16 - 2 - ($ - $$) db 0
 
 ; The DAP: Data Address Packet
 ; This describes where to read stage 2 from
+dap:
 db	0x10	; size of DAP
 db	0x00	; unused
 dw	0x07	; number of sectors to read
