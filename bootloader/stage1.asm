@@ -15,7 +15,8 @@ mov	ss, ax
 mov	sp, 0x7f00
 
 ; Assume we're using the first hard disk
-mov	dl, 0x80
+; TODO: get this information from before the DAP
+mov	dl, [drive]
 
 ; reset drive
 mov	ah, 0x00
@@ -69,8 +70,9 @@ PrintCharacter:
 	int	0x10
 	ret
 
+; Data for printing
 _hex:		db '0123456789ABCDEF'
-_errmsg:	db 'Stage 1 bootloader error: 0x'
+_errmsg:	db 'Stage 1 bootloader error (stage 2 could not be loaded): 0x'
 		db 0
 _haltmsg:	db 10
 		db 13
@@ -79,7 +81,11 @@ _haltmsg:	db 10
 		db 13
 		db 0
 
-times	512 - 16 - 2 - ($ - $$) db 0
+times	512 - 16 - 2 - 1 - ($ - $$) db 0
+
+; The ID of the drive from which to read stage 2
+drive:
+db	0x80
 
 ; The DAP: Data Address Packet
 ; This describes where to read stage 2 from
