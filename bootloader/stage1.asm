@@ -4,8 +4,8 @@
 ;; STAGE 1 ;;
 ;;;;;;;;;;;;;
 
-[bits 16]
-[org 0x7c00]
+[bits	16]
+[org	0x7c00]
 
 cli
 
@@ -43,8 +43,7 @@ shr	si, 4
 mov	al, [_hex + si]
 call	PrintCharacter
 mov	si, dx
-shl	si, 12
-shr	si, 12
+and	si, 0x0f
 mov	al, [_hex + si]
 call	PrintCharacter
 
