@@ -57,7 +57,19 @@ Newline:
 	call	PrintCharacter
 	ret
 
+;; Baton control functions
+StartBaton:
+	ret
+
+SpinBaton:
+	ret
+
+StopBaton:
+	ret
+
 $name:		db	'Wyvern Bootloader v0.1'
+$baton:		db	'/-\|'
+$curbaton:	db	'/'
 
 ; force a total of 7 sectors
 times	7*512 - ($ - $$) db 0
