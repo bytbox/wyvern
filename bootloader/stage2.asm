@@ -15,7 +15,18 @@ int	0x10
 
 ; Drop into protected mode
 cli		; ensure interrupts are disabled
+; TODO load the GDT
+; We enter protected mode by flipping the first bit of CR0
+mov	eax, cr0
+or	al, 1
+;mov	cr0, eax
+; TODO jump into the GDT
 
+;;; Function definitions
+;;	These functions are 16-bit real mode functions - they
+;;	use the BIOS directly and will not work once we are in protected mode.
+
+; Print a character to the screen
 
 ; force a total of 7 sectors
 times	7*512 - ($ - $$) db 0
