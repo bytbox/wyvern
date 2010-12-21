@@ -59,6 +59,9 @@ Newline:
 
 ;; Baton control functions
 StartBaton:
+	mov	al, [$baton]
+	mov	[$curbaton], al
+	call	PrintCharacter
 	ret
 
 SpinBaton:
