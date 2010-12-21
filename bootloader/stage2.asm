@@ -6,10 +6,7 @@
 [org	0x1000]
 
 mov	al, '>'
-mov	ah, 0x0e
-mov	bh, 0x00
-mov	bl, 0x07
-int	0x10
+call	PrintCharacter
 
 ; TODO: go graphical
 
@@ -27,6 +24,12 @@ or	al, 1
 ;;	use the BIOS directly and will not work once we are in protected mode.
 
 ; Print a character to the screen
+PrintCharacter:
+	mov	ah, 0x0e
+	mov	bh, 0x00
+	mov	bl, 0x07
+	int	0x10
+	ret
 
 ; force a total of 7 sectors
 times	7*512 - ($ - $$) db 0
