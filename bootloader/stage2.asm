@@ -75,6 +75,7 @@ SpinBaton:
 	mov	ch, 0
 	mov	cl, [$curbaton]
 	inc	cl
+	and	cl, 3
 	mov	[$curbaton], cx
 	mov	si, cx
 	mov	al, [$baton + si]
