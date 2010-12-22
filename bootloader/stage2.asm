@@ -9,6 +9,9 @@ mov	si, $name
 call	PrintString
 call	Newline
 
+call	StartBaton
+call	StopBaton
+
 ; get information about our system
 
 ; TODO: go graphical
@@ -21,6 +24,8 @@ mov	eax, cr0
 or	al, 1
 ;mov	cr0, eax
 ; TODO jump into the GDT
+
+hlt
 
 ;;; Function definitions
 ;;	These functions are 16-bit real mode functions - they
@@ -60,19 +65,35 @@ Newline:
 ;; Baton control functions
 StartBaton:
 	mov	al, [$baton]
-	mov	[$curbaton], al
+	mov	[$curbaton], byte 0
 	call	PrintCharacter
 	ret
 
 SpinBaton:
+	mov	al, 8
+	call	PrintCharacter
+	mov	ch, 0
+	mov	cl, [$curbaton]
+	inc	cl
+	mov	[$curbaton], cx
+	mov	si, cx
+	mov	al, [$baton + si]
+	call	PrintCharacter
 	ret
 
 StopBaton:
+	mov	al, 8
+	call	PrintCharacter
+	mov	al, ' '
+	call	PrintCharacter
+	mov	al, 8
+	call	PrintCharacter
 	ret
 
 $name:		db	'Wyvern Bootloader v0.1'
+		db	0
 $baton:		db	'/-\|'
-$curbaton:	db	'/'
+$curbaton:	db	0
 
 ; force a total of 7 sectors
 times	7*512 - ($ - $$) db 0
