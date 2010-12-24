@@ -6,6 +6,7 @@ Intelligently manages wyvern builds based on a simple conditional
 compilation system.
 """
 
+import configparser
 from optparse import OptionParser
 import os
 
@@ -17,6 +18,11 @@ while not os.path.exists(os.path.join(root, 'WBuildConfig')):
         # TODO print an actual error message
         print("No WBuildConfig file found")
         exit(1)
+
+# Read the configuration file
+cfgfname = os.path.join(root, 'WBuildConfig')
+cfgparser = configparser.ConfigParser()
+cfgparser.read(cfgfname)
 
 # Parse options
 usage = "usage: %prog [options]"
