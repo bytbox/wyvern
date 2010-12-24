@@ -13,12 +13,22 @@ call	StartBaton
 
 ; get information about our system, as necessary
 
-; read the kernel into memory
-mov	dl, [drive]
-
 ; TODO: go graphical
 
+; read the kernel into memory
+mov	dl, [drive]
+mov	si, dap
+mov	ah, 0x42
+int	0x13
+jnc	postread
+
+mov	al, '!'
+call	PrintCharacter
+cli
+hlt
+
 ; Drop into protected mode
+postread:
 cli		; ensure interrupts are disabled
 
 ; TODO load the GDT
