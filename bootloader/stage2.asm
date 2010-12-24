@@ -10,15 +10,21 @@ call	PrintString
 call	Newline
 
 call	StartBaton
-call	StopBaton
 
-; get information about our system
+; get information about our system, as necessary
+
+; read the kernel into memory
+mov	dl, [drive]
 
 ; TODO: go graphical
 
 ; Drop into protected mode
 cli		; ensure interrupts are disabled
+
 ; TODO load the GDT
+
+call	StopBaton
+
 ; We enter protected mode by flipping the first bit of CR0
 mov	eax, cr0
 or	al, 1
@@ -97,5 +103,24 @@ $baton:		db	'/-\|'
 $curbaton:	db	0
 
 ; force a total of 7 sectors
-times	7*512 - ($ - $$) db 0
+times	7*512 - 16 - 1 - ($ - $$) db 0
+
+; The ID of the drive from which to read the kernel
+drive:
+db	0x80
+
+; The DAP: Data Address Packet
+; This describes where to read the kernel from
+dap:
+dap_size:
+db	0x10	; size of DAP
+db	0x00	; unused
+dap_rsize:
+dw	0x07	; number of sectors to read
+dap_offset:
+dw	0x1000	; offset of destination buffer
+dap_segment:
+dw	0x0000	; segment of destination buffer
+dap_start:
+dq	0x0008	; where to start reading
 

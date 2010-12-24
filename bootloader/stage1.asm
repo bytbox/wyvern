@@ -14,8 +14,7 @@ mov	ss, ax
 ; we don't need very much stack space
 mov	sp, 0x7f00
 
-; Assume we're using the first hard disk
-; TODO: get this information from before the DAP
+; read the drive number from the DAP
 mov	dl, [drive]
 
 ; reset drive
