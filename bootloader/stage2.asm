@@ -49,8 +49,38 @@ or	al, 1
 hlt
 
 error:
-mov	al, '!'
+call	StopBaton
+mov	dl, ah
+mov	si, 0
+.1:
+mov	al, [_errmsg + si]
 call	PrintCharacter
+inc	si
+mov	al, [_errmsg + si]
+cmp	al, 0
+jnz	.1
+
+; print the actual error code
+mov	dh, 0
+mov	si, dx
+shr	si, 4
+mov	al, [_hex + si]
+call	PrintCharacter
+mov	si, dx
+and	si, 0x0f
+mov	al, [_hex + si]
+call	PrintCharacter
+call	Newline
+
+mov	si, 0
+.2:
+mov     al, [_haltmsg + si]
+call	PrintCharacter
+inc     si
+mov     al, [_haltmsg + si]
+cmp     al, 0
+jnz     .2
+call	Newline
 cli
 hlt
 
@@ -153,6 +183,13 @@ $baton:		db	'/-\|'
 $curbaton:	db	0
 ; used to slow the spin rate
 $batonc		dw	0
+
+; Static data to help printing
+_hex:		db '0123456789ABCDEF'
+_errmsg:	db 'Stage 2 bootloader error (kernel could not be read): 0x'
+		db 0
+_haltmsg:	db 'Halting'
+		db 0
 
 ; force a total of 7 sectors
 times	7*512 - 16 - 1 - ($ - $$) db 0
