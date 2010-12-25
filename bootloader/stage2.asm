@@ -50,6 +50,8 @@ hlt
 
 error:
 call	StopBaton
+call	Newline
+
 mov	dl, ah
 mov	si, 0
 .1:
