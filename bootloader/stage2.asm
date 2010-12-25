@@ -179,7 +179,7 @@ StopBaton:
 	call	PrintCharacter
 	ret
 
-$name:		db	'Wyvern Bootloader v0.1'
+$name:		db	'Wyvern Bootloader v0.2'
 		db	0
 $baton:		db	'/-\|'
 $curbaton:	db	0
