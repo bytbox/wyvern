@@ -6,7 +6,7 @@
 ; This kernel is mostly just empty space. It has a valid ending 
 ; sequence.
 
-times	2047*512 db 0
+times	2047*32*512 db 0
 
 ; Terminating sectors
 ;

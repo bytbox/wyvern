@@ -16,12 +16,19 @@ call	StartBaton
 ; TODO: go graphical
 
 ; read the kernel into memory
+mov	dl, 0
 copykernel:
 call	ReadSector
 call	CheckSector
 jcxz	done
-call	SpinBaton
 call	CopySector
+mov	dx, [$batonc]
+inc	dx
+and	dx, 0x03ff
+mov	[$batonc], dx
+jnz	skipspin
+call	SpinBaton
+skipspin:
 jmp	copykernel
 
 done:
@@ -144,6 +151,8 @@ $name:		db	'Wyvern Bootloader v0.1'
 		db	0
 $baton:		db	'/-\|'
 $curbaton:	db	0
+; used to slow the spin rate
+$batonc		dw	0
 
 ; force a total of 7 sectors
 times	7*512 - 16 - 1 - ($ - $$) db 0
