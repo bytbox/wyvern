@@ -16,19 +16,17 @@ call	StartBaton
 ; TODO: go graphical
 
 ; read the kernel into memory
-mov	dl, [drive]
-mov	si, dap
-mov	ah, 0x42
-int	0x13
-jnc	postread
+copykernel:
+call	ReadSector
+call	CheckSector
+jcxz	done
+call	SpinBaton
+call	CopySector
+jmp	copykernel
 
-mov	al, '!'
-call	PrintCharacter
-cli
-hlt
+done:
 
 ; Drop into protected mode
-postread:
 cli		; ensure interrupts are disabled
 
 ; TODO load the GDT
@@ -43,9 +41,44 @@ or	al, 1
 
 hlt
 
+error:
+mov	al, '!'
+call	PrintCharacter
+cli
+hlt
+
 ;;; Function definitions
 ;;	These functions are 16-bit real mode functions - they
 ;;	use the BIOS directly and will not work once we are in protected mode.
+
+; Read a single sector from the current cursor position, and advance the
+; cursor.
+ReadSector:
+	; copy sector
+	mov	dl, [drive]
+	mov	si, dap
+	mov	ah, 0x42
+	int	0x13
+	jc	error
+	; advance the cursor
+	mov	eax, [dap_start]
+	inc	eax
+	mov	[dap_start], eax
+	ret
+
+; Check the current sector to see if it is the final sector in the kernel.
+; The value of cx will be 0 if it is, >0 if it is not.
+;
+; The requirement for a sector ending is that in consist entirely of the
+; word 0x2db5 (10110101 00101101 on little-endian systems).
+CheckSector:
+	mov	cx, 1
+	ret
+
+; Copy a sector from the sector hold point into the program destination, and 
+; advance the program destination.
+CopySector:
+	ret
 
 ; Print a character to the screen from al
 PrintCharacter:
@@ -126,9 +159,9 @@ dap_size:
 db	0x10	; size of DAP
 db	0x00	; unused
 dap_rsize:
-dw	0x07	; number of sectors to read
+dw	0x01	; number of sectors to read
 dap_offset:
-dw	0x1000	; offset of destination buffer
+dw	0xa000	; offset of destination buffer
 dap_segment:
 dw	0x0000	; segment of destination buffer
 dap_start:
