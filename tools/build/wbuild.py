@@ -40,8 +40,11 @@ parser.add_option("-V", "--version", action="store_true",
 
 (options, args) = parser.parse_args()
 
+# Print version information (and exit) if asked for.
 if options.version:
     print("%s %s" % (cfgparser.get("Project", "name").lower(), 
         cfgparser.get("Project", "version")))
     exit(0)
+
+# TODO handle the arguments
 
