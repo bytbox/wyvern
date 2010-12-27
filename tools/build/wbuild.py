@@ -10,6 +10,18 @@ import configparser
 from optparse import OptionParser
 import os
 
+class Project:
+    """
+
+    """
+    pass
+
+class Component:
+    """
+
+    """
+    pass
+
 # Find configuration file
 root = os.getcwd()
 while not os.path.exists(os.path.join(root, 'WBuildConfig')):
@@ -23,6 +35,8 @@ while not os.path.exists(os.path.join(root, 'WBuildConfig')):
 cfgfname = os.path.join(root, 'WBuildConfig')
 cfgparser = configparser.ConfigParser()
 cfgparser.read(cfgfname)
+
+# Create the specified components
 
 # Parse options
 usage = "usage: %prog [-f FILE]"
@@ -47,4 +61,6 @@ if options.version:
     exit(0)
 
 # TODO handle the arguments
+
+# TODO read in the kernel configuration file
 
