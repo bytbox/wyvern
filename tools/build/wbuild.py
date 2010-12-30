@@ -10,11 +10,17 @@ import configparser
 from optparse import OptionParser
 import os
 
+# TODO create proper exception hierarchy
+
 class Project:
     """
 
     """
-    pass
+    def __init__(self, settings):
+        # Copy the settings in directly
+        for key in settings:
+            self.__dict__[key] = settings[key]
+        self.settings = settings
 
 class Component:
     """
@@ -35,6 +41,14 @@ while not os.path.exists(os.path.join(root, 'WBuildConfig')):
 cfgfname = os.path.join(root, 'WBuildConfig')
 cfgparser = configparser.ConfigParser()
 cfgparser.read(cfgfname)
+
+# Create the project from a generated dictionary of project settings
+proj_opts = cfgparser.options("Project")
+project_settings = {}
+for opt in proj_opts:
+    project_settings[opt] = cfgparser.get("Project", opt)
+
+project = Project(project_settings)
 
 # Create the specified components
 
