@@ -19,7 +19,11 @@ class Project:
     these.
     """
     def __init__(self, settings):
+        """
+
+        """
         # Copy the settings in directly
+        # TODO is it wise to indiscriminately copy /all/ values?
         for key in settings:
             self.__dict__[key] = settings[key]
         self.settings = settings
@@ -28,7 +32,11 @@ class Component:
     """
 
     """
-    pass
+    def __init__(self, settings):
+        """
+
+        """
+        pass
 
 # Find configuration file
 root = os.getcwd()
@@ -49,10 +57,19 @@ proj_opts = cfgparser.options("Project")
 project_settings = {}
 for opt in proj_opts:
     project_settings[opt] = cfgparser.get("Project", opt)
-
 project = Project(project_settings)
 
 # Create the specified components
+component_list = project.components.split()
+comps = []
+for component_name in component_list:
+    component_settings = {}
+    comp_opts = cfgparser.options(component_name)
+    # TODO handle the case when component has no section
+    for opt in comp_opts:
+        component_settings[opt] = cfgparser.get(component_name, opt)
+    component = Component(component_settings)
+    comps += [component]
 
 # Parse options
 usage = "usage: %prog [-f FILE]"
@@ -72,8 +89,7 @@ parser.add_option("-V", "--version", action="store_true",
 
 # Print version information (and exit) if asked for.
 if options.version:
-    print("%s %s" % (cfgparser.get("Project", "name").lower(), 
-        cfgparser.get("Project", "version")))
+    print("%s %s" % (project.name.lower(), project.version))
     exit(0)
 
 # TODO handle the arguments
