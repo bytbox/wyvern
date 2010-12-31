@@ -28,6 +28,9 @@ class Project:
             self.__dict__[key] = settings[key]
         self.settings = settings
 
+    def build():
+        pass
+
 class Component:
     """
 
@@ -61,7 +64,7 @@ project = Project(project_settings)
 
 # Create the specified components
 component_list = project.components.split()
-comps = []
+comps = {}
 for component_name in component_list:
     component_settings = {}
     comp_opts = cfgparser.options(component_name)
@@ -69,7 +72,9 @@ for component_name in component_list:
     for opt in comp_opts:
         component_settings[opt] = cfgparser.get(component_name, opt)
     component = Component(component_settings)
-    comps += [component]
+    comps[component_name] = component
+# Stick the list of components to the project
+project.components = comps
 
 # Parse options
 usage = "usage: %prog [-f FILE]"
