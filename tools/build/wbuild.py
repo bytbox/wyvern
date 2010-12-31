@@ -13,8 +13,10 @@ import os
 # TODO create proper exception hierarchy
 
 class Project:
-    """
+    """Represents a project.
 
+    In ordinary usage (i.e. for simple projects) there will be only one of
+    these.
     """
     def __init__(self, settings):
         # Copy the settings in directly
