@@ -1,2 +1,9 @@
 # Rules used by all wyvern Jamfiles
 
+ARCH ?= x86 ;
+BOOT ?= bios ;
+
+rule Nasm {
+
+}
+

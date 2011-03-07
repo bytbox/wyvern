@@ -1,0 +1,6 @@
+SubDir TOP bootloader x86-bios ;
+
+Nasm stage1.bin : stage1.asm ;
+Nasm stage2.bin : stage2.asm ;
+Nasm dummy.bin : dummy.asm ;
+
