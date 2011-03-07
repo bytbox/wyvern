@@ -1,0 +1,27 @@
+# Rules used by all wyvern Jamfiles
+
+ARCH ?= x86 ;
+BOOT ?= bios ;
+
+rule Nasm {
+	LOCATE on $(<) = $(LOCATE_SOURCE) ;
+	LOCATE on $(>) = $(LOCATE_SOURCE) ;
+	Depends $(<) : $(>) ;
+	Clean clean : $(<) ;
+}
+
+actions Nasm {
+	nasm -f bin -o $(<) $(>)
+}
+
+rule Cat {
+	LOCATE on $(<) = $(LOCATE_SOURCE) ;
+	LOCATE on $(>) = $(LOCATE_SOURCE) ;
+	Depends $(<) : $(>) ;
+	Clean clean : $(<) ;
+}
+
+actions Cat {
+	cat $(>) > $(<)
+}
+
