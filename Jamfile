@@ -1,7 +1,7 @@
 SubDir TOP ;
 
 ARCH ?= x86 ;
-FI ?= bios ;
+BOOT ?= bios ;
 
 SubInclude TOP bootloader ;
 SubInclude TOP kernel ;
