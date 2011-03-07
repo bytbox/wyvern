@@ -11,14 +11,17 @@ rule Nasm {
 }
 
 actions Nasm {
-	nasm -f bin -o $(<) $(>) ;
+	nasm -f bin -o $(<) $(>)
 }
 
 rule Cat {
-
+	LOCATE on $(<) = $(LOCATE_SOURCE) ;
+	LOCATE on $(>) = $(LOCATE_SOURCE) ;
+	Depends $(<) : $(>) ;
+	Clean clean : $(<) ;
 }
 
 actions Cat {
-
+	cat $(>) > $(<)
 }
 
