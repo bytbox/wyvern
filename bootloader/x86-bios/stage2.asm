@@ -39,6 +39,8 @@ cli		; ensure interrupts are disabled
 ; TODO load the GDT
 
 call	StopBaton
+mov	si, $donemsg
+call	PrintString
 
 ; We enter protected mode by flipping the first bit of CR0
 mov	eax, cr0
@@ -108,10 +110,27 @@ ReadSector:
 ; Check the current sector to see if it is the final sector in the kernel.
 ; The value of cx will be 0 if it is, >0 if it is not.
 ;
-; The requirement for a sector ending is that in consist entirely of the
+; The requirement for a sector ending is that it consist entirely of the
 ; word 0x2db5 (10110101 00101101 on little-endian systems).
+;
+; The current sector is located at dap_offset.
 CheckSector:
+	mov	cx, 256
+	mov	ax, 0x2db5
+checkloop:
+	mov 	bx, 256
+	sub	bx, cx
+	mov	dx, [bx + dap_offset]
+	cmp	ax, dx
+	jne	nomatch
+	dec	cx
+	dec	cx
+	jnz	checkloop
+	mov	cx, 0		; This is the last sector
+	jmp	checkdone
+nomatch:			; This is not the last sector
 	mov	cx, 1
+checkdone:			; The check is over - return the result
 	ret
 
 ; Copy a sector from the sector hold point into the program destination, and 
@@ -185,6 +204,11 @@ $baton:		db	'/-\|'
 $curbaton:	db	0
 ; used to slow the spin rate
 $batonc		dw	0
+
+$donemsg:	db	'Kernel loaded!'
+		db	10
+		db	13
+		db	0
 
 ; Static data to help printing
 _hex:		db '0123456789ABCDEF'
