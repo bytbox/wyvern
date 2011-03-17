@@ -21,8 +21,8 @@ mov	dl, [drive]
 mov	ah, 0x00
 int	0x13
 
+; read (as specified by the DAP)
 mov	si, dap
-
 mov	ah, 0x42
 int	0x13
 jnc	0x1000
