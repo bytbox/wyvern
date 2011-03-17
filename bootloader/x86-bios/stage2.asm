@@ -1,3 +1,5 @@
+; Boot loader for wyvern
+
 ;;;;;;;;;;;;;
 ;; STAGE 2 ;;
 ;;;;;;;;;;;;;
@@ -38,7 +40,7 @@ cli		; ensure interrupts are disabled
 
 ; TODO load the GDT
 
-call	StopBaton
+;call	StopBaton
 mov	si, $donemsg
 call	PrintString
 
@@ -101,6 +103,7 @@ ReadSector:
 	mov	ah, 0x42
 	int	0x13
 	jc	error
+
 	; advance the cursor
 	mov	eax, [dap_start]
 	inc	eax
@@ -117,20 +120,20 @@ ReadSector:
 CheckSector:
 	mov	cx, 256
 	mov	ax, 0x2db5
-checkloop:
+.checkloop:
+	mov	si, [dap_offset]
 	mov 	bx, 256
 	sub	bx, cx
-	mov	dx, [bx + dap_offset]
+	mov	dx, [bx + si]
 	cmp	ax, dx
-	jne	nomatch
-	dec	cx
-	dec	cx
-	jnz	checkloop
+	jne	.nomatch
+	sub	cx, 2
+	jnz	.checkloop
 	mov	cx, 0		; This is the last sector
-	jmp	checkdone
-nomatch:			; This is not the last sector
+	jmp	.checkdone
+.nomatch:			; This is not the last sector
 	mov	cx, 1
-checkdone:			; The check is over - return the result
+.checkdone:			; The check is over - return the result
 	ret
 
 ; Copy a sector from the sector hold point into the program destination, and 
@@ -218,7 +221,7 @@ _haltmsg:	db 'Halting'
 		db 0
 
 ; force a total of 7 sectors
-times	7*512 - 16 - 1 - ($ - $$) db 0
+;times	7*512 - 16 - 1 - ($ - $$) db 0
 
 ; The ID of the drive from which to read the kernel
 drive:
