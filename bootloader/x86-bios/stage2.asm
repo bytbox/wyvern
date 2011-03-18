@@ -35,18 +35,19 @@ jmp	copykernel
 
 done:
 
-; Drop into protected mode
-cli		; ensure interrupts are disabled
 
 ; TODO load the GDT
 
-;call	StopBaton
+call	StopBaton
 mov	si, $donemsg
 call	PrintString
 
+; Drop into protected mode
+cli		; ensure interrupts are disabled
+
 ; We enter protected mode by flipping the first bit of CR0
-mov	eax, cr0
-or	al, 1
+;mov	eax, cr0
+;or	al, 1
 ;mov	cr0, eax
 ; TODO jump into the GDT
 
@@ -119,8 +120,8 @@ ReadSector:
 ; The current sector is located at dap_offset.
 CheckSector:
 	mov	cx, 256
-	mov	ax, 0x2db5
 .checkloop:
+	mov	ax, 0x2db5
 	mov	si, [dap_offset]
 	mov 	bx, 256
 	sub	bx, cx
@@ -221,7 +222,7 @@ _haltmsg:	db 'Halting'
 		db 0
 
 ; force a total of 7 sectors
-;times	7*512 - 16 - 1 - ($ - $$) db 0
+times	7*512 - 16 - 1 - ($ - $$) db 0
 
 ; The ID of the drive from which to read the kernel
 drive:
@@ -240,5 +241,5 @@ dw	0xa000	; offset of destination buffer
 dap_segment:
 dw	0x0000	; segment of destination buffer
 dap_start:
-dq	0x0008	; where to start reading
+dq	0x0007	; where to start reading
 

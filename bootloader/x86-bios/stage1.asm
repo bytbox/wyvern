@@ -12,7 +12,7 @@ mov	ax, 0
 mov	ds, ax
 mov	ss, ax
 ; we don't need very much stack space
-mov	sp, 0x7f00
+mov	sp, 0x6000
 
 ; read the drive number from the DAP
 mov	dl, [drive]
