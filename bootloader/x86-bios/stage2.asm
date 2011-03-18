@@ -41,6 +41,7 @@ done:
 call	StopBaton
 mov	si, $donemsg
 call	PrintString
+call	Newline
 
 ; Drop into protected mode
 cli		; ensure interrupts are disabled
@@ -119,11 +120,11 @@ ReadSector:
 ;
 ; The current sector is located at dap_offset.
 CheckSector:
-	mov	cx, 256
+	mov	cx, 512
 .checkloop:
 	mov	ax, 0x2db5
 	mov	si, [dap_offset]
-	mov 	bx, 256
+	mov 	bx, 512
 	sub	bx, cx
 	mov	dx, [bx + si]
 	cmp	ax, dx
@@ -140,6 +141,19 @@ CheckSector:
 ; Copy a sector from the sector hold point into the program destination, and 
 ; advance the program destination.
 CopySector:
+	mov	si, [kwptr]
+	mov	bx, [dap_offset]
+	; copy 512 bytes
+	mov	cx, 512
+.1:
+	mov	ax, [bx]
+	mov	[si], ax
+	dec	cx
+	inc	si
+	inc	bx
+	jnz	.1
+
+	mov	[kwptr], si
 	ret
 
 ; Print a character to the screen from al
@@ -221,6 +235,9 @@ _errmsg:	db 'Stage 2 bootloader error (kernel could not be read): 0x'
 _haltmsg:	db 'Halting'
 		db 0
 
+; Kernel write pointer. Updated by WriteSector.
+kwptr:		dw 0xa000
+
 ; force a total of 7 sectors
 times	7*512 - 16 - 1 - ($ - $$) db 0
 
@@ -237,7 +254,7 @@ db	0x00	; unused
 dap_rsize:
 dw	0x01	; number of sectors to read
 dap_offset:
-dw	0xa000	; offset of destination buffer
+dw	0x9000	; offset of destination buffer
 dap_segment:
 dw	0x0000	; segment of destination buffer
 dap_start:
