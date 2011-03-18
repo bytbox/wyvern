@@ -41,15 +41,24 @@ mov	si, $donemsg
 call	PrintString
 call	Newline
 
-; TODO load the GDT
-
 ; Drop into protected mode
 cli		; ensure interrupts are disabled
 
+; load the GDT
+lgdt	[gdtr]
+
+; enable A20 line
+; FIXME this mightn't always work. Try also
+;	mov ax, 0x2401
+;	int 0x15
+in	al, 0x92
+or	al, 2
+out	0x92, al
+
 ; We enter protected mode by flipping the first bit of CR0
-;mov	eax, cr0
-;or	al, 1
-;mov	cr0, eax
+mov	eax, cr0
+or	al, 1
+mov	cr0, eax
 ; TODO jump into the GDT
 
 hlt
@@ -237,6 +246,12 @@ _haltmsg:	db 'Halting'
 
 ; Kernel write pointer. Updated by WriteSector.
 kwptr:		dw 0xa000
+
+gdtr:
+
+gdt:
+
+gdt_end:
 
 ; force a total of 7 sectors
 times	7*512 - 16 - 1 - ($ - $$) db 0
