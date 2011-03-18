@@ -36,12 +36,12 @@ jmp	copykernel
 done:
 
 
-; TODO load the GDT
-
 call	StopBaton
 mov	si, $donemsg
 call	PrintString
 call	Newline
+
+; TODO load the GDT
 
 ; Drop into protected mode
 cli		; ensure interrupts are disabled
@@ -148,9 +148,9 @@ CopySector:
 .1:
 	mov	ax, [bx]
 	mov	[si], ax
-	dec	cx
 	inc	si
 	inc	bx
+	dec	cx
 	jnz	.1
 
 	mov	[kwptr], si
