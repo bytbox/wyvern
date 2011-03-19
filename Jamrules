@@ -1,5 +1,7 @@
 # Rules used by all wyvern Jamfiles
 
+VERSION ?= 0.1 ;
+
 ARCH ?= x86 ;
 BOOT ?= bios ;
 
@@ -23,5 +25,9 @@ rule Cat {
 
 actions Cat {
 	cat $(>) > $(<)
+}
+
+rule Kernel {
+
 }
 
