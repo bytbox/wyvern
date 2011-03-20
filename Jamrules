@@ -1,9 +1,32 @@
 # Rules used by all wyvern Jamfiles
 
-VERSION ?= 0.1 ;
+VERSION ?= 0.0.1 ;
 
 ARCH ?= x86 ;
 BOOT ?= bios ;
+
+NASM ?= nasm ;
+CC ?= cc ;
+LD ?= ld ;
+
+KCC ?= $(CC) ;
+KCCFLAGS ?= -c -Wall -Wextra -Werror -nostdlib -nostartfiles -nodefaultlibs ;
+
+KNASM ?= $(NASM) ;
+KNASMFLAGS ?= -f elf ;
+
+KLD ?= $(LD) ;
+KLDFLAGS ?= ;
+
+# Adjust linker flags
+switch $(ARCH)
+{
+case x86 :
+	KCCFLAGS += -m32 ;
+	KLDFLAGS += -melf_i386 ;
+case * : # Unrecognized arch
+	Exit unrecognized architecture: $(ARCH) ;
+}
 
 rule Nasm {
 	LOCATE on $(<) = $(LOCATE_SOURCE) ;
@@ -27,23 +50,60 @@ actions Cat {
 	cat $(>) > $(<)
 }
 
+rule KObject {
+	switch $(>:S)
+	{
+		case .c :	KCC $(<) : $(>) ;
+		case .asm :	KNasm $(<) : $(>) ;
+		case * : Exit invalid suffix for $(>) ;
+	}
+}
+
 # A CC-like rule for the kernel
 rule KCC {
-
-}
-
-rule Kernel {
-	Kernel1 $(<).kernel : $(>) ;
-}
-
-rule Kernel1 {
 	LOCATE on $(<) = $(LOCATE_SOURCE) ;
 	SEARCH on $(>) = $(SEARCH_SOURCE) ;
 	Depends $(<) : $(>) ;
-	Depends all : $(<) ;
 	Clean clean : $(<) ;
 }
 
-actions Kernel1 {
+actions KCC {
+	$(KCC) $(KCCFLAGS) -o $(<) $(>) ;
+}
+
+rule KNasm {
+	LOCATE on $(<) = $(LOCATE_SOURCE) ;
+	SEARCH on $(>) = $(SEARCH_SOURCE) ;
+	Depends $(<) : $(>) ;
+	Clean clean : $(<) ;
+}
+
+actions KNasm {
+	$(NASM) $(KNASMFLAGS) -o $(<) $(>) ;
+}
+
+rule KLink {
+	LOCATE on $(<) = $(LOCATE_SOURCE) ;
+	SEARCH on $(>) = $(SEARCH_SOURCE) ;
+	SEARCH on $(3) = $(SEARCH_SOURCE) ;
+	Depends $(<) : $(>) $(3) ;
+	Clean clean : $(<) ;
+
+	_script on $(<) = $(3) ;
+}
+
+actions KLink {
+	$(KLD) $(KLDFLAGS) -T $(_script) -o $(<) $(>)
+}
+
+rule Kernel {
+	local i ;
+	for i in [ FGristFiles $(>) ]
+	{
+		local obj = $(i:S=$(SUFOBJ)) ;
+		KObject $(obj) : $(i) ;
+	}
+	KLink $(<).kernel : [ FGristFiles $(>:S=$(SUFOBJ)) ] : $(3) ;
+	Depends exe : $(<).kernel ;
 }
 
