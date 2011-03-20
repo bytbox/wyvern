@@ -8,4 +8,8 @@
 ;
 ; Here we have the equivalent of two sectors to spare us having to deal with
 ; alignment issues.
+;
+; TODO this is ugly
+times	512 dw 0x2db5
+times	1 db 0xff
 times	512 dw 0x2db5

@@ -247,10 +247,11 @@ _errmsg:	db 'Stage 2 bootloader error (kernel could not be read): 0x'
 _haltmsg:	db 'Halting'
 		db 0
 
+; The starting point for the kwptr. Static
+kptr:		dw 0xa000
+
 ; Kernel write pointer. Updated by WriteSector.
 kwptr:		dw 0xa000
-
-		db 'Hello'
 
 ; Global Descriptor Table
 gdtr:		dw gdt_end-gdt
@@ -298,6 +299,8 @@ mov	ds, ax
 mov	es, ax
 mov	fs, ax
 mov	gs, ax
+mov	ax, [kptr]
+jmp	ax
 hlt
 
 [bits 16]
