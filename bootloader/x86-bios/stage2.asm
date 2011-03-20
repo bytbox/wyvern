@@ -247,10 +247,44 @@ _haltmsg:	db 'Halting'
 ; Kernel write pointer. Updated by WriteSector.
 kwptr:		dw 0xa000
 
-gdtr:
+		db 'Hello'
 
-gdt:
+; Global Descriptor Table
+gdtr:		dw gdt_end-gdt
+		dd gdt
 
+gdt:					; Each entry is 2 words and four bytes.
+; Null segment
+		dw 0			; limit_low
+		dw 0			; base_low
+		db 0			; base_middle
+		db 0			; access
+		db 0			; granularity
+		db 0			; base_high
+
+; Code segment
+;
+; Theoretically, we could used segment based protection with a separate (and
+; relatively small) code segment. However, wyven will want to cache as much
+; code as possible, making a large (and potentially dynamic) code storage space
+; useful. Effectively having one large segment makes the bootloader simpler and
+; gives the kernel more control - everybody's happy.
+		dw 0xffff		; limit_low
+		dw 0			; base_low
+		db 0			; base_middle
+		db 0x9a			; access
+		db 0xcf			; granularity
+		db 0			; base_high
+
+; Data segment
+;
+; Essentially identical to the code segment.
+		dw 0xffff		; limit_low
+		dw 0			; base_low
+		db 0			; base_middle
+		db 0x92			; access
+		db 0xcf			; granularity
+		db 0			; base_high
 gdt_end:
 
 ; force a total of 7 sectors
