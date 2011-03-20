@@ -17,6 +17,12 @@ call	StartBaton
 
 ; TODO: go graphical
 
+; some necessary initialization
+mov	ax, [koffset]
+mov	[kwoffset], ax
+mov	ax, [ksegment]
+mov	[kwsegment], ax
+
 ; read the kernel into memory
 mov	dl, 0
 copykernel:
@@ -153,19 +159,23 @@ CheckSector:
 ; Copy a sector from the sector hold point into the program destination, and 
 ; advance the program destination.
 CopySector:
-	mov	si, [kwptr]
+	mov	es, [kwsegment]
+	mov	di, [kwoffset]
 	mov	bx, [dap_offset]
 	; copy 512 bytes
 	mov	cx, 512
 .1:
 	mov	ax, [bx]
-	mov	[si], ax
-	inc	si
+	mov	[es:di], ax
+	inc	di
 	inc	bx
 	dec	cx
 	jnz	.1
 
-	mov	[kwptr], si
+	mov	ax, es
+	add	ax, 0x20
+
+	mov	[kwsegment], ax
 	ret
 
 ; Print a character to the screen from al
@@ -247,11 +257,15 @@ _errmsg:	db 'Stage 2 bootloader error (kernel could not be read): 0x'
 _haltmsg:	db 'Halting'
 		db 0
 
-; The starting point for the kwptr. Static
-kptr:		dw 0xa000
+; The starting point for the kwptr. Static.
+kptr:
+ksegment:	dw 0x0000	; segment
+koffset:	dw 0xa000	; offset
 
 ; Kernel write pointer. Updated by WriteSector.
-kwptr:		dw 0xa000
+kwptr:	
+kwsegment:	dw 0x0000	; segment
+kwoffset:	dw 0x0000	; offset
 
 ; Global Descriptor Table
 gdtr:		dw gdt_end-gdt
@@ -299,7 +313,13 @@ mov	ds, ax
 mov	es, ax
 mov	fs, ax
 mov	gs, ax
-mov	ax, [kptr]
+
+xor	eax, eax
+xor	ebx, ebx
+mov	ax, [koffset]
+mov	bx, [ksegment]
+shl	ebx, 4
+;add	eax, ebx
 jmp	ax
 hlt
 
