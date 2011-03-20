@@ -47,19 +47,22 @@ cli		; ensure interrupts are disabled
 ; load the GDT
 lgdt	[gdtr]
 
+; TODO jump into the GDT
+
 ; enable A20 line
 ; FIXME this mightn't always work. Try also
 ;	mov ax, 0x2401
 ;	int 0x15
-in	al, 0x92
-or	al, 2
-out	0x92, al
+;in	al, 0x92
+;or	al, 2
+;out	0x92, al
 
 ; We enter protected mode by flipping the first bit of CR0
 mov	eax, cr0
 or	al, 1
 mov	cr0, eax
-; TODO jump into the GDT
+
+jmp	0x08:init_32bit
 
 hlt
 
@@ -286,6 +289,18 @@ gdt:					; Each entry is 2 words and four bytes.
 		db 0xcf			; granularity
 		db 0			; base_high
 gdt_end:
+
+[bits 32]
+
+init_32bit:
+mov	ax, 0x10
+mov	ds, ax
+mov	es, ax
+mov	fs, ax
+mov	gs, ax
+hlt
+
+[bits 16]
 
 ; force a total of 7 sectors
 times	7*512 - 16 - 1 - ($ - $$) db 0
