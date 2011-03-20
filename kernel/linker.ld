@@ -1,9 +1,7 @@
 ENTRY (loader)
 
 SECTIONS {
-	. = 0x00100000;
-	
-	.text : {
+	.text : AT(0x00010000) {
 		*(.text)
 	}
 
