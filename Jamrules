@@ -27,7 +27,23 @@ actions Cat {
 	cat $(>) > $(<)
 }
 
-rule Kernel {
+# A CC-like rule for the kernel
+rule KCC {
 
+}
+
+rule Kernel {
+	Kernel1 $(<).kernel : $(>) ;
+}
+
+rule Kernel1 {
+	LOCATE on $(<) = $(LOCATE_SOURCE) ;
+	SEARCH on $(>) = $(SEARCH_SOURCE) ;
+	Depends $(<) : $(>) ;
+	Depends all : $(<) ;
+	Clean clean : $(<) ;
+}
+
+actions Kernel1 {
 }
 

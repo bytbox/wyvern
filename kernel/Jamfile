@@ -1,6 +1,6 @@
 SubDir TOP kernel ;
 
-SubInclude TOP kernel arch ;
-
 Kernel wyvern-$(VERSION) : kmain.c ;
+
+SubInclude TOP kernel arch ;
 
