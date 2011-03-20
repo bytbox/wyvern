@@ -3,6 +3,7 @@ SubDir TOP bootloader x86-bios ;
 Nasm stage1.bin : stage1.asm ;
 Nasm stage2.bin : stage2.asm ;
 Nasm dummy.bin : dummy.asm ;
-Cat wl.img : stage1.bin stage2.bin dummy.bin ;
+Cat bootloader.bin : stage1.bin stage2.bin ;
+Cat wl.img : bootloader.bin dummy.bin ;
 Depends all : wl.img ;
 
