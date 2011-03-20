@@ -85,8 +85,7 @@ actions KNasm {
 rule KLink {
 	LOCATE on $(<) = $(LOCATE_SOURCE) ;
 	SEARCH on $(>) = $(SEARCH_SOURCE) ;
-	SEARCH on $(3) = $(SEARCH_SOURCE) ;
-	Depends $(<) : $(>) $(3) ;
+	Depends $(<) : $(>) ;
 	Clean clean : $(<) ;
 }
 
