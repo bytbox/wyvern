@@ -88,12 +88,10 @@ rule KLink {
 	SEARCH on $(3) = $(SEARCH_SOURCE) ;
 	Depends $(<) : $(>) $(3) ;
 	Clean clean : $(<) ;
-
-	_script on $(<) = $(3) ;
 }
 
 actions KLink {
-	$(KLD) $(KLDFLAGS) -T $(_script) -o $(<) $(>)
+	$(KLD) $(KLDFLAGS) -T $(>[1]) -o $(<) $(>[2-])
 }
 
 rule Kernel {
@@ -103,7 +101,7 @@ rule Kernel {
 		local obj = $(i:S=$(SUFOBJ)) ;
 		KObject $(obj) : $(i) ;
 	}
-	KLink $(<).kernel : [ FGristFiles $(>:S=$(SUFOBJ)) ] : $(3) ;
+	KLink $(<).kernel : $(3) [ FGristFiles $(>:S=$(SUFOBJ)) ] ;
 	Depends exe : $(<).kernel ;
 }
 
