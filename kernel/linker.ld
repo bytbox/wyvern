@@ -21,4 +21,8 @@ SECTIONS {
 		*(.bss)
 		ebss = .;
 	}
+
+	/DISCARD/ : {
+		*(.comment)
+	}
 }
