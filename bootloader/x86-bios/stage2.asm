@@ -259,8 +259,8 @@ _haltmsg:	db 'Halting'
 
 ; The starting point for the kwptr. Static.
 kptr:
-ksegment:	dw 0x0000	; segment
-koffset:	dw 0xa000	; offset
+ksegment:	dw 0x1000	; segment
+koffset:	dw 0x0000	; offset
 
 ; Kernel write pointer. Updated by WriteSector.
 kwptr:	
