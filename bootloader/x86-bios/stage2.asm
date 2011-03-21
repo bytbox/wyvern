@@ -166,6 +166,7 @@ CopySector:
 	mov	cx, 512
 .1:
 	mov	ax, [bx]
+;	call	PrintCharacter
 	mov	[es:di], ax
 	inc	di
 	inc	bx
@@ -319,8 +320,10 @@ xor	ebx, ebx
 mov	ax, [koffset]
 mov	bx, [ksegment]
 shl	ebx, 4
-;add	eax, ebx
-jmp	ax
+add	eax, ebx
+jmp	eax
+mov	al, [0x101ff]
+;mov	[0xb8000], al
 hlt
 
 [bits 16]
@@ -345,5 +348,5 @@ dw	0x9000	; offset of destination buffer
 dap_segment:
 dw	0x0000	; segment of destination buffer
 dap_start:
-dq	0x0007	; where to start reading
+dq	0x0008	; where to start reading
 
