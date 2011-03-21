@@ -1,10 +1,8 @@
-char d = 'r';
 char h = 'H';
 void kmain() {
 	unsigned char *videoram = (unsigned char *)0xb8000;
 	videoram[0]=h;
 	int loc = (int)&h;
-	videoram[2]=loc;
 	char out[12];
 	int i;
 	for (i=0; i<12; i++) {
@@ -14,6 +12,6 @@ void kmain() {
 	}
 
 	for (i=0; i<12; i++)
-		videoram[i*2] = out[i];
+		videoram[i*2+4] = out[i];
 }
 
