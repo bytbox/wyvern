@@ -1,19 +1,8 @@
 SubDir TOP ;
 
-Depends all : img ;
-
-rule Img {
-	LOCATE on $(<) = $(LOCATE_SOURCE) ;
-	Depends img : $(<) ;
-	Depends $(<) : $(>) ;
-	Clean clean : $(<) ;
-}
-
-actions Img {
-	cat $(>) > $(<)
-}
-
 Img wyvern-$(VERSION).img : bootloader.bin wyvern-$(VERSION).kernel buffer.bin ;
 
 SubInclude TOP bootloader ;
 SubInclude TOP kernel ;
+SubInclude TOP tools ;
+

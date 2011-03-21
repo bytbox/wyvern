@@ -5,6 +5,7 @@ VERSION ?= 0.0.1 ;
 ARCH ?= x86 ;
 BOOT ?= bios ;
 
+ECHO ?= /bin/echo ;
 NASM ?= nasm ;
 CC ?= cc ;
 LD ?= ld ;
@@ -35,7 +36,8 @@ rule Nasm {
 	Clean clean : $(<) ;
 }
 
-actions Nasm {
+actions quietly Nasm {
+	$(ECHO) -e Nasm\\t$(<)
 	nasm -f bin -o $(<) $(>)
 }
 
@@ -46,7 +48,8 @@ rule Cat {
 	Clean clean : $(<) ;
 }
 
-actions Cat {
+actions quietly Cat {
+	$(ECHO) -e Cat\\t$(<)
 	cat $(>) > $(<)
 }
 
@@ -67,7 +70,8 @@ rule KCC {
 	Clean clean : $(<) ;
 }
 
-actions KCC {
+actions quietly KCC {
+	$(ECHO) -e CC\\t$(<)
 	$(KCC) $(KCCFLAGS) -o $(<) $(>) ;
 }
 
@@ -78,7 +82,8 @@ rule KNasm {
 	Clean clean : $(<) ;
 }
 
-actions KNasm {
+actions quietly KNasm {
+	$(ECHO) -e Nasm\\t$(<)
 	$(NASM) $(KNASMFLAGS) -o $(<) $(>) ;
 }
 
@@ -89,7 +94,8 @@ rule KLink {
 	Clean clean : $(<) ;
 }
 
-actions KLink {
+actions quietly KLink {
+	$(ECHO) -e LD\\t$(<)
 	$(KLD) $(KLDFLAGS) -T $(>[1]) -o $(<) $(>[2-])
 }
 
@@ -103,4 +109,19 @@ rule Kernel {
 	KLink $(<).kernel : $(3) [ FGristFiles $(>:S=$(SUFOBJ)) ] ;
 	Depends exe : $(<).kernel ;
 }
+
+rule Img {
+	LOCATE on $(<) = $(LOCATE_SOURCE) ;
+	Depends img : $(<) ;
+	Depends $(<) : $(>) ;
+	Clean clean : $(<) ;
+}
+
+actions quietly Img {
+	$(ECHO) -e Cat\\t$(<)
+	cat $(>) > $(<)
+}
+
+NotFile img ;
+Depends all : img ;
 
