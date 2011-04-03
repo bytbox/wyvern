@@ -11,7 +11,7 @@ CC ?= cc ;
 LD ?= ld ;
 
 KCC ?= $(CC) ;
-KCCFLAGS ?= -c -Wall -Wextra -Werror -nostdlib -nostartfiles -nodefaultlibs ;
+KCCFLAGS ?= -c -Wall -Wextra -nostdlib -nostartfiles -nodefaultlibs ;
 
 KNASM ?= $(NASM) ;
 KNASMFLAGS ?= -f elf ;
