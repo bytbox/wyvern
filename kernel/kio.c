@@ -10,5 +10,6 @@ void kwrite(char *str) {
 		c++;
 	}
 	_kwrite_line++;
+	return;
 }
 

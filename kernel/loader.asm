@@ -5,14 +5,14 @@ extern kmain            ; kmain is defined elsewhere
 STACKSIZE equ 0x4000                  ; that's 16k.
  
 loader:
-	mov esp, stack+STACKSIZE           ; set up the stack
-	call kmain                       ; call kernel proper
-	cli
+	mov esp, stack+STACKSIZE	; set up the stack
+	call kmain			; call kernel proper
+	;cli
 hang:
-	hlt                                ; halt machine should kernel return
+	hlt				; halt machine should kernel return
 	jmp   hang
 
 section .bss
 align 4
 stack:
-	resb STACKSIZE                     ; reserve 16k stack on a doubleword boundary
+	resb STACKSIZE			; reserve 16k stack on a doubleword boundary

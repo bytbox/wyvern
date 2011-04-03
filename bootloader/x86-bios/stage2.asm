@@ -306,9 +306,13 @@ gdt:					; Each entry is 2 words and four bytes.
 		db 0			; base_high
 gdt_end:
 
+; the GDT is over
+
+; 32-bit code for executing the kernel
 [bits 32]
 
 init_32bit:
+; initialize the segment registers
 mov	ax, 0x10
 mov	ds, ax
 mov	es, ax
@@ -321,12 +325,11 @@ mov	ax, [koffset]
 mov	bx, [ksegment]
 shl	ebx, 4
 add	eax, ebx
-jmp	eax
-mov	al, [0x101ff]
-;mov	[0xb8000], al
+jmp	eax		; jump to the kernel
 hlt
 
-[bits 16]
+
+[bits 16]		; blank space and the DAP
 
 ; force a total of 7 sectors
 times	7*512 - 16 - 1 - ($ - $$) db 0

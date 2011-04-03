@@ -3,5 +3,6 @@
 void kmain() {
 	kwrite("Hello");
 	kwrite("There");
+	return;
 }
 
