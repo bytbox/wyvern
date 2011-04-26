@@ -1,0 +1,12 @@
+#!/bin/sh
+exec tail -n +3 $0
+# GRUB2 menu entry
+
+menuentry "Wyvern" {
+	insmod part_gpt
+	insmod ext2
+	echo 'Loading wyvern ...'
+	multiboot /boot/wyvern.bin
+	boot
+}
+
