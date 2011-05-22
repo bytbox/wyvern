@@ -156,8 +156,8 @@ CheckSector:
 .checkdone:			; The check is over - return the result
 	ret
 
-; Copy a sector from the sector hold point into the program destination, and 
-; advance the program destination.
+; Copy a sector from the sector hold point into the program destination, 
+; advance the program destination, and increase ksize.
 CopySector:
 	mov	es, [kwsegment]
 	mov	di, [kwoffset]
@@ -175,8 +175,11 @@ CopySector:
 
 	mov	ax, es
 	add	ax, 0x20
-
 	mov	[kwsegment], ax
+
+	mov	ax, [ksize]
+	inc	ax
+	mov	[ksize], ax
 	ret
 
 ; Print a character to the screen from al
@@ -268,6 +271,12 @@ kwptr:
 kwsegment:	dw 0x0000	; segment
 kwoffset:	dw 0x0000	; offset
 
+; The size of the kernel, in 512-byte sectors
+ksize:		dw 0x0000
+
+; The kernel execution pointer. Static.
+kxptr:		dd 0x100200
+
 ; Global Descriptor Table
 gdtr:		dw gdt_end-gdt
 		dd gdt
@@ -312,6 +321,32 @@ gdt_end:
 [bits 32]
 
 init_32bit:
+; move the kernel up to 0x100200
+xor	eax, eax
+xor	ebx, ebx
+mov	ax, [koffset]
+mov	bx, [ksegment]
+shl	ebx, 4
+add	eax, ebx
+mov	ebx, 0x100200
+mov	cx, [ksize]
+.1:
+mov	[ksize], cx
+
+; copy 512 bytes
+mov	cx, 512
+.2:
+mov	dx, [eax]
+mov	[ebx], dx
+inc	eax
+inc	ebx
+dec	cx
+jnz	.2
+
+mov	cx, [ksize]
+dec	cx
+jnz	.1
+
 ; initialize the segment registers
 mov	ax, 0x10
 mov	ds, ax
