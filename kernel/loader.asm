@@ -2,7 +2,7 @@ global loader           ; making entry point visible to linker
 extern kmain            ; kmain is defined elsewhere
  
 ; reserve initial kernel stack space
-STACKSIZE equ 0x4000                  ; that's 16k.
+STACKSIZE equ 0x4000			; 16K should be enough
  
 loader:
 	mov esp, stack+STACKSIZE	; set up the stack
@@ -15,4 +15,5 @@ hang:
 section .bss
 align 4
 stack:
-	resb STACKSIZE			; reserve 16k stack on a doubleword boundary
+	resb STACKSIZE
+
