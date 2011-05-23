@@ -19,10 +19,10 @@ multiboot_header:
 	dd	HEADER_MAGIC			; magic number
 	dd	HEADER_FLAGS			; flags
 	dd	CHECKSUM			; checksum
-	dd	LOADBASE + multiboot_header	; header adress
-	dd	LOADBASE			; load adress
-	dd	00				; load end adress : not necessary
-	dd	00				; bss end adress : not necessary
+	dd	LOADBASE + multiboot_header	; header address
+	dd	LOADBASE			; load address
+	dd	00				; load end address : not necessary
+	dd	00				; bss end address : not necessary
 	dd	LOADBASE + multiboot_entry	; entry adress
 	dd	1				; EGA-standard text mode
 	dd	0				; width (no preference)
@@ -33,23 +33,24 @@ multiboot_entry:
 	mov	edi, 0xB8000			;Msg to check the boot was OK
 	mov	esi, loading
 	add	esi, LOADBASE			;loading is just an offset
-msg:      
+	mov	ah, 0x0f
+msg:
 	mov	byte al, [esi]
 	cmp	al, 0
-	je	halt
+	je	load
 	mov	word [edi], ax
 	add	edi, 2
 	inc	esi
 	jmp	msg
 	      
-halt:	hlt					;Halt processor
-	jmp	halt
-   
+load:
+	jmp	0x100200
+
 loading:
 	db	"Booting wyvern ..."
 	db	0
 	align	4
-	times	(128) db 0x00                     ;foo data
+	times	(128) db 0x00
 	
-	times	8*512 - ($ - $$) db 0
+	times	512 - ($ - $$) db 0
 
