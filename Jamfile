@@ -2,7 +2,7 @@ SubDir TOP ;
 
 Img wyvern-$(VERSION).img : wyvern-$(VERSION).kernel ;
 
-SubInclude TOP doc;
+SubInclude TOP doc ;
 SubInclude TOP kernel ;
 SubInclude TOP tools ;
 
