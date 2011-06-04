@@ -1,7 +1,0 @@
-SubDir TOP bootloader ;
-
-Nasm buffer.bin : buffer.asm ;
-#Depends obj : buffer.bin ;
-
-SubInclude TOP bootloader $(ARCH)-$(BOOT) ;
-

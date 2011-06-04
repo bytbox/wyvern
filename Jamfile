@@ -1,8 +1,7 @@
 SubDir TOP ;
 
-Img wyvern-$(VERSION).img : bootloader.bin wyvern-$(VERSION).kernel buffer.bin ;
+Img wyvern-$(VERSION).img : wyvern-$(VERSION).kernel ;
 
-SubInclude TOP bootloader ;
 SubInclude TOP kernel ;
 SubInclude TOP tools ;
 

@@ -1,6 +1,6 @@
-OUTPUT_FORMAT("binary")
+OUTPUT_FORMAT("elf32-i386")
 ENTRY(loader)
-phys = 0x000100200;
+phys = 0x000100000;
 
 SECTIONS
 {

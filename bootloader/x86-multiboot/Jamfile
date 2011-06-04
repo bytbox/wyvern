@@ -1,6 +1,0 @@
-SubDir TOP bootloader x86-multiboot ;
-
-Nasm multiboot.bin : multiboot.asm ;
-Cat bootloader.bin : multiboot.bin ;
-Depends all : bootloader.bin ;
-
