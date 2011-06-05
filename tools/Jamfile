@@ -1,4 +1,5 @@
 SubDir TOP tools ;
 
+SubInclude TOP tools bin2c ;
 SubInclude TOP tools mkdfl ;
 
