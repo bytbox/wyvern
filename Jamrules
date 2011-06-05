@@ -5,7 +5,7 @@ VERSION ?= 0.0.1 ;
 ARCH ?= x86 ;
 BOOT ?= bios ;
 
-ECHO ?= /bin/echo ;
+ECHO ?= /bin/echo -e ;
 NASM ?= nasm ;
 CC ?= cc ;
 LD ?= ld ;
@@ -37,7 +37,7 @@ rule Nasm {
 }
 
 actions quietly Nasm {
-	$(ECHO) -e Nasm\\t$(<)
+	$(ECHO) Nasm\\t$(<)
 	nasm -f bin -o $(<) $(>)
 }
 
@@ -49,7 +49,7 @@ rule Cat {
 }
 
 actions quietly Cat {
-	$(ECHO) -e Cat\\t$(<)
+	$(ECHO) Cat\\t$(<)
 	cat $(>) > $(<)
 }
 
@@ -71,7 +71,7 @@ rule KCC {
 }
 
 actions quietly KCC {
-	$(ECHO) -e CC\\t$(<)
+	$(ECHO) CC\\t$(<)
 	$(KCC) $(KCCFLAGS) -o $(<) $(>) ;
 }
 
@@ -83,7 +83,7 @@ rule KNasm {
 }
 
 actions quietly KNasm {
-	$(ECHO) -e Nasm\\t$(<)
+	$(ECHO) Nasm\\t$(<)
 	$(NASM) $(KNASMFLAGS) -o $(<) $(>) ;
 }
 
@@ -95,7 +95,7 @@ rule KLink {
 }
 
 actions quietly KLink {
-	$(ECHO) -e LD\\t$(<)
+	$(ECHO) LD\\t$(<)
 	$(KLD) $(KLDFLAGS) -T $(>[1]) -o $(<) $(>[2-])
 }
 
@@ -118,7 +118,7 @@ rule Img {
 }
 
 actions quietly Img {
-	$(ECHO) -e Cat\\t$(<)
+	$(ECHO) Cat\\t$(<)
 	cat $(>) > $(<)
 }
 
