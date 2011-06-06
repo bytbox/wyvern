@@ -9,12 +9,23 @@ int main(int argc, char *argv[]) {
 
 	int i;
 	char *varname = malloc(strlen(argv[1])+1);
-	for (i=0; i<strlen(argv[1]); i++) {
-
+	for (i=0; i<=strlen(argv[1]); i++) {
+		if (argv[1][i] == '.')
+			varname[i] = '_';
+		else varname[i] = argv[1][i];
 	}
 
 	FILE *fin = fopen(argv[1], "rb");
+	if (!fin) perror("could not open file for reading"), exit(1);
 	FILE *fout = fopen(argv[2], "w");
+
+	fprintf(fout, "unsigned char %s[] = {\n", varname);
+	unsigned char c = fgetc(fin);
+	while (!feof(fin)) {
+		fprintf(fout, "\t0x%x,\n", c);
+		c = fgetc(fin);
+	}
+	fprintf(fout, "\t};\n");
 
 	fclose(fin);
 	fclose(fout);
