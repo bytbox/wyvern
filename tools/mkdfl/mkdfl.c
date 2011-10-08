@@ -1,5 +1,5 @@
 /*
- * DFL Generator
+ * DFL ("Dumb Frame Layout") Generator
  * Copyright (c) 2011 Scott Lawrence <bytbox@gmail.com>
  */
 
