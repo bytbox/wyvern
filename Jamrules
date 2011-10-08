@@ -36,8 +36,7 @@ rule Nasm {
 	Clean clean : $(<) ;
 }
 
-actions quietly Nasm {
-	$(ECHO) Nasm\\t$(<)
+actions Nasm {
 	nasm -f bin -o $(<) $(>)
 }
 
@@ -48,8 +47,7 @@ rule Cat {
 	Clean clean : $(<) ;
 }
 
-actions quietly Cat {
-	$(ECHO) Cat\\t$(<)
+actions Cat {
 	cat $(>) > $(<)
 }
 
@@ -70,8 +68,7 @@ rule KCC {
 	Clean clean : $(<) ;
 }
 
-actions quietly KCC {
-	$(ECHO) CC\\t$(<)
+actions KCC {
 	$(KCC) $(KCCFLAGS) -o $(<) $(>) ;
 }
 
@@ -82,8 +79,7 @@ rule KNasm {
 	Clean clean : $(<) ;
 }
 
-actions quietly KNasm {
-	$(ECHO) Nasm\\t$(<)
+actions KNasm {
 	$(NASM) $(KNASMFLAGS) -o $(<) $(>) ;
 }
 
@@ -94,8 +90,7 @@ rule KLink {
 	Clean clean : $(<) ;
 }
 
-actions quietly KLink {
-	$(ECHO) LD\\t$(<)
+actions KLink {
 	$(KLD) $(KLDFLAGS) -T $(>[1]) -o $(<) $(>[2-])
 }
 
@@ -117,8 +112,7 @@ rule Img {
 	Clean clean : $(<) ;
 }
 
-actions quietly Img {
-	$(ECHO) Cat\\t$(<)
+actions Img {
 	cat $(>) > $(<)
 }
 
