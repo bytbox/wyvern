@@ -23,7 +23,7 @@ int main(int argc, char *argv[]) {
 	fprintf(fout, "unsigned char %s[] = {\n", varname);
 	unsigned char c = fgetc(fin);
 	while (!feof(fin)) {
-		fprintf(fout, "\t0x%x,\n", c);
+		fprintf(fout, "\t0x.2%x,\n", c);
 		c = fgetc(fin);
 	}
 	fprintf(fout, "\t};\n");
