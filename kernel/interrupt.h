@@ -15,6 +15,7 @@ struct Register_State {
 /*** C Functions ***/
 
 void interrupt_32(struct Register_State);
+void irq_32(struct Register_State);
 
 #endif /* !INTERRUPT_H */
 

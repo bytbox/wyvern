@@ -48,7 +48,7 @@ load:
 	;cli
 hang:
 	hlt				; halt machine should kernel return
-	jmp   hang
+	jmp	hang
 
 loading:
 	db	"Booting wyvern ..."

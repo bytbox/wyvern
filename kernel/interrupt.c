@@ -8,6 +8,7 @@ void interrupt_32(struct Register_State rs) {
 }
 
 void irq_32(struct Register_State rs) {
+	kwrite("IRQ");
 	// Send an EOI (end of interrupt) signal to the PICs.
 	// If this interrupt involved the slave.
 	if (rs.int_no >= 40)
