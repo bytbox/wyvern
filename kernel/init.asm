@@ -17,5 +17,7 @@ gdt_load_32:
 	ret
 
 idt_load_32:
+	mov	eax, [esp+4]
+	lidt	[eax]
 	ret
 
