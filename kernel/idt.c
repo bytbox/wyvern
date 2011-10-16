@@ -46,7 +46,6 @@ void idt_init() {
 	idt_set(29, (uint32_t)isr29, 0x08, 0x8E);
 	idt_set(30, (uint32_t)isr30, 0x08, 0x8E);
 	idt_set(31, (uint32_t)isr31, 0x08, 0x8E);
-	idt_set(32, (uint32_t)isr32, 0x08, 0x8E);
 	idt_set(32, (uint32_t)irq0, 0x08, 0x8E);
 	idt_set(33, (uint32_t)irq1, 0x08, 0x8E);
 	idt_set(34, (uint32_t)irq2, 0x08, 0x8E);
