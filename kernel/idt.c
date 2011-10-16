@@ -4,7 +4,7 @@ inline void idt_32_set_row(uint8_t row) {
 	idt_32[row] = idt_row_32;
 }
 
-/* Explicitly 0'd IDT - is this necessary? */
+/* IDT */
 struct IDT_Descr_32 idt_32 [256] = {
 /* INT 0 */	{0, 0, 0, 0, 0},
 /* INT 1 */	{0, 0, 0, 0, 0},

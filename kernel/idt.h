@@ -1,7 +1,15 @@
+/*
+	idt.h
+	Describes the Interrupt Descriptor Table (IDT)
+*/
+
 #ifndef IDT_H
 #define IDT_H
 
 #include "types.h"
+
+#pragma pack(push)
+#pragma pack(1)
 
 /*** C Functions ***/
 
@@ -28,6 +36,8 @@ extern struct IDT_Descr_32 idt_32 [];
 
 /* Temporary storage */
 extern struct IDT_Descr_32 idt_row_32;
+
+#pragma pack(pop)
 
 #endif /* !IDT_H */
 
