@@ -4,6 +4,8 @@
 #include "kio.h"
 
 void kmain() {
+	kio_init();
+
 	/* complete kernel initialization */
 	kwrite("Preparing GDT...");
 	gdt_load_32((uint32_t)&gdt_ptr_32);

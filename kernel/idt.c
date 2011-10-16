@@ -1,4 +1,5 @@
 #include "idt.h"
+#include "io.h"
 #include "types.h"
 
 /* IDT */
@@ -9,7 +10,13 @@ struct IDT_Ptr_32 idt_ptr_32 = {
 	(uint32_t)(&idt_32) /* base */
 };
 
+extern void remap_irq(void);
 void idt_init() {
+	remap_irq();
+
+	outb(0x21, 0xFD);
+	outb(0xA1, 0xFF);
+
 	idt_set(0, (uint32_t)isr0, 0x08, 0x8E);
 	idt_set(1, (uint32_t)isr1, 0x08, 0x8E);
 	idt_set(2, (uint32_t)isr2, 0x08, 0x8E);
@@ -43,6 +50,22 @@ void idt_init() {
 	idt_set(30, (uint32_t)isr30, 0x08, 0x8E);
 	idt_set(31, (uint32_t)isr31, 0x08, 0x8E);
 	idt_set(32, (uint32_t)isr32, 0x08, 0x8E);
+	idt_set(32, (uint32_t)irq0, 0x08, 0x8E);
+	idt_set(33, (uint32_t)irq1, 0x08, 0x8E);
+	idt_set(34, (uint32_t)irq2, 0x08, 0x8E);
+	idt_set(35, (uint32_t)irq3, 0x08, 0x8E);
+	idt_set(36, (uint32_t)irq4, 0x08, 0x8E);
+	idt_set(37, (uint32_t)irq5, 0x08, 0x8E);
+	idt_set(38, (uint32_t)irq6, 0x08, 0x8E);
+	idt_set(39, (uint32_t)irq7, 0x08, 0x8E);
+	idt_set(40, (uint32_t)irq8, 0x08, 0x8E);
+	idt_set(41, (uint32_t)irq9, 0x08, 0x8E);
+	idt_set(42, (uint32_t)irq10, 0x08, 0x8E);
+	idt_set(43, (uint32_t)irq11, 0x08, 0x8E);
+	idt_set(44, (uint32_t)irq12, 0x08, 0x8E);
+	idt_set(45, (uint32_t)irq13, 0x08, 0x8E);
+	idt_set(46, (uint32_t)irq14, 0x08, 0x8E);
+	idt_set(47, (uint32_t)irq15, 0x08, 0x8E);
 }
 
 void idt_set(uint8_t inum, uint32_t fptr, uint16_t sel, uint8_t flags) {
