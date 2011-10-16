@@ -5,3 +5,4 @@
 *.kernel
 tools/mkdfl/mkdfl
 tools/bin2c/bin2c
+bochsout.txt
