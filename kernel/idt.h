@@ -13,10 +13,8 @@
 
 /*** C Functions ***/
 
-/* Set a row of the IDT to the currently prepared row */
-inline void idt_32_set_row (uint8_t);
-
 /*** Assembly Functions ***/
+void idt_load_32 (uint32_t);
 
 /*** Data Structures ***/
 
@@ -29,13 +27,18 @@ struct IDT_Descr_32 {
 	uint16_t offset_2;
 };
 
+struct IDT_Ptr_32 {
+	uint16_t limit;
+	uint32_t base;
+};
+
 /*** Externs ***/
 
-/* The IDT Table */
+/* The IDT */
 extern struct IDT_Descr_32 idt_32 [];
 
-/* Temporary storage */
-extern struct IDT_Descr_32 idt_row_32;
+/* Pointer to the IDT */
+extern struct IDT_Ptr_32 idt_ptr_32;
 
 #pragma pack(pop)
 

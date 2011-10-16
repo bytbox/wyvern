@@ -1,9 +1,5 @@
 #include "idt.h"
 
-inline void idt_32_set_row(uint8_t row) {
-	idt_32[row] = idt_row_32;
-}
-
 /* IDT */
 struct IDT_Descr_32 idt_32 [256] = {
 /* INT 0 */	{0, 0, 0, 0, 0},
@@ -264,5 +260,8 @@ struct IDT_Descr_32 idt_32 [256] = {
 /* INT 255 */	{0, 0, 0, 0, 0},
 };
 
-struct IDT_Descr_32 idt_row_32;
+struct IDT_Ptr_32 idt_ptr_32 = {
+	sizeof(idt_32)-1,   /* limit */
+	(uint32_t)(&idt_32) /* base */
+};
 

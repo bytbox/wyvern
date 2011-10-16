@@ -1,4 +1,5 @@
-global gdt_load_32
+[GLOBAL gdt_load_32]
+[GLOBAL idt_load_32]
 
 gdt_load_32:
 	mov	eax, [esp+4]
@@ -13,5 +14,8 @@ gdt_load_32:
 
 	jmp	0x08:.1
 .1:
+	ret
+
+idt_load_32:
 	ret
 
