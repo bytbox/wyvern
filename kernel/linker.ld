@@ -5,23 +5,23 @@ phys = 0x000100000;
 SECTIONS
 {
 	.text phys : AT(phys) {
-		code = .;
+		code = .; _code = .; __code = .;
 		*(.text)
-		*(.rodata)
 		. = ALIGN(4096);
 	}
 	.data : AT(phys + (data - code))
 	{
-		data = .;
+		data = .; _data = .; __data = .;
 		*(.data)
+		*(.rodata)
 		. = ALIGN(4096);
 	}
 	.bss : AT(phys + (bss - code))
 	{
-		bss = .;
+		bss = .; _bss = .; __bss = .;
 		*(.bss)
 		. = ALIGN(4096);
 	}
-	end = .;
+	end = .; _end = .; __end = .;
 }
 
