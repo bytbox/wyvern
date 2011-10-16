@@ -8,6 +8,9 @@
 
 #include "types.h"
 
+#pragma pack(push)
+#pragma pack(1)
+
 /*** C Functions ***/
 
 /*** Assembly Functions ***/
@@ -37,6 +40,8 @@ struct GDT_Ptr_32 {
 extern struct GDT_Entry_32 gdt_32 [];
 
 extern struct GDT_Ptr_32 gdt_ptr_32;
+
+#pragma pack(pop)
 
 #endif /* !GDT_H */
 
