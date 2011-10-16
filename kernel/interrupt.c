@@ -8,15 +8,9 @@ void interrupt_32(struct Register_State rs) {
 }
 
 void irq_32(struct Register_State rs) {
-	kwrite("IRQ");
-	// Send an EOI (end of interrupt) signal to the PICs.
-	// If this interrupt involved the slave.
+	// Send EOI
 	if (rs.int_no >= 40)
-	{
-	    // Send reset signal to slave.
-	    outb(0xA0, 0x20);
-	}
-	// Send reset signal to master. (As well as slave, if necessary).
+		outb(0xA0, 0x20);
 	outb(0x20, 0x20);
 
 //	if (interrupt_handlers[rs.int_no] != 0)
@@ -24,7 +18,7 @@ void irq_32(struct Register_State rs) {
 //	    isr_t handler = interrupt_handlers[rs.int_no];
 //	    handler(rs);
 //	}
-
+	kput(rs.err_code + '0');
 	kwrite("IRQ");
 }
 

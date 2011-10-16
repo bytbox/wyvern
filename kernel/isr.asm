@@ -22,7 +22,7 @@ isr%1:
 [GLOBAL irq%1]
 irq%1:
 	cli
-	push	byte 0
+	push	byte %1
 	push	byte %2
 	jmp	irq_common
 %endmacro
@@ -78,7 +78,6 @@ irq_common:
 	add esp, 8
 	sti
 	iret
-
 	
 
 ISR_NOERRCODE	0
