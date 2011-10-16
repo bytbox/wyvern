@@ -14,9 +14,6 @@ extern void remap_irq(void);
 void idt_init() {
 	remap_irq();
 
-	outb(0x21, 0xFD);
-	outb(0xA1, 0xFF);
-
 	idt_set(0, (uint32_t)isr0, 0x08, 0x8E);
 	idt_set(1, (uint32_t)isr1, 0x08, 0x8E);
 	idt_set(2, (uint32_t)isr2, 0x08, 0x8E);
@@ -66,6 +63,9 @@ void idt_init() {
 	idt_set(45, (uint32_t)irq13, 0x08, 0x8E);
 	idt_set(46, (uint32_t)irq14, 0x08, 0x8E);
 	idt_set(47, (uint32_t)irq15, 0x08, 0x8E);
+	
+	outb(0x21, 0xFD);
+	outb(0xA1, 0xFF);
 }
 
 void idt_set(uint8_t inum, uint32_t fptr, uint16_t sel, uint8_t flags) {

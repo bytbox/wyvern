@@ -41,10 +41,9 @@ remap_irq:
 	out	0x21, ax
 	out	0xA1, ax
 	xor	ax, ax
-	mov	ax, 0xFF
 	out	0x21, ax
 	out	0xA1, ax
-	
+
 	sti
 	ret
 
