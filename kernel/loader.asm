@@ -45,7 +45,6 @@ msg:
 load:
 	mov esp, stack+STACKSIZE	; set up the stack
 	call kmain			; call kernel proper
-	int 3
 	;cli
 hang:
 	hlt				; halt machine should kernel return
