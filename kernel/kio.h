@@ -1,9 +1,13 @@
 #ifndef KIO_H
 #define KIO_H
 
+#include "types.h"
+
 extern volatile unsigned char *videoram;
 
 void kio_init();
+
+void kdraw(uint8_t, uint8_t, char *, uint8_t);
 
 /* 
  * kwrite is a hack to allow direct, emergency writing to the screen. It
