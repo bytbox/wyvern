@@ -13,14 +13,17 @@ depend: .depend
 	$(CC) $(CFLAGS) -MM $^ >> ./.depend;
 -include .depend
 
-wyvern.kernel: depend ${KERNELOBJ}
-	${KLD} ${KLDFLAGS} -T linker.ld -o $@ ${KERNELOBJ}
+wyvern.kernel: ${KERNELOBJ}
+	@${ECHO} "LD   $@"
+	@${KLD} ${KLDFLAGS} -T linker.ld -o $@ ${KERNELOBJ}
 
 .asm.o:
-	${KNASM} ${KNASMFLAGS} -o $@ $<
+	@${ECHO} "ASM  $@"
+	@${KNASM} ${KNASMFLAGS} -o $@ $<
 
 .c.o:
-	${KCC} ${KCCFLAGS} -o $@ $<
+	@${ECHO} "CC   $@"
+	@${KCC} ${KCCFLAGS} -o $@ $<
 
 clean:
 	${RM} .depend
