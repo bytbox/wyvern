@@ -1,21 +1,25 @@
-include ../make.config
+BASEDIR ?= ..
+KERNDIR = ${BASEDIR}/kernel
 
-KERNELASM = loader init isr
-KERNELC = kmain idt gdt interrupt io kio
+include ${BASEDIR}/make.config
+
+KERNELASM_LIST = loader init isr
+KERNELASM = $(foreach f, ${KERNELASM_LIST}, ${BASEDIR}/kernel/$f)
+KERNELC_LIST = kmain idt gdt interrupt io kio lisp/parse
+KERNELC = $(foreach f, ${KERNELC_LIST}, ${BASEDIR}/kernel/$f)
 KERNELOBJ = ${KERNELASM:=.o} ${KERNELC:=.o}
 KERNELSRC = ${KERNELASM:=.asm} ${KERNELC:=.c}
 
 all: depend wyvern.kernel
 
-depend: .depend
-.depend: ${KERNELC:=.c}
-	${RM} ./.depend
-	$(CC) $(CFLAGS) -MM $^ >> ./.depend;
--include .depend
+depend: ${KERNDIR}/.depend
+${KERNDIR}/.depend: ${KERNELC:=.c}
+	$(KCC) $(KCCFLAGS) -MM $^ > $@;
+-include ${KERNDIR}/.depend
 
 wyvern.kernel: ${KERNELOBJ}
 	@${ECHO} "LD   $@"
-	@${KLD} ${KLDFLAGS} -T linker.ld -o $@ ${KERNELOBJ}
+	@${KLD} ${KLDFLAGS} -T ${BASEDIR}/kernel/linker.ld -o $@ ${KERNELOBJ}
 
 .asm.o:
 	@${ECHO} "ASM  $@"
@@ -26,10 +30,10 @@ wyvern.kernel: ${KERNELOBJ}
 	@${KCC} ${KCCFLAGS} -o $@ $<
 
 clean:
-	${RM} .depend
+	${RM} ${KERNDIR}/.depend
 	${RM} ${KERNELOBJ}
-	${RM} wyvern.kernel
+	${RM} ${KERNDIR}/wyvern.kernel
 
-.PHONY: all clean
+.PHONY: all clean depend
 .SUFFIXES: .c .o .asm
 

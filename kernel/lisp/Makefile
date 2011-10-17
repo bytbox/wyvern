@@ -1,0 +1,3 @@
+BASEDIR = ../..
+include ../Makefile
+
