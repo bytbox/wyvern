@@ -1,20 +1,19 @@
 include ../make.config
 
-#depend: .depend
-
-#.depend: $(SRCS)
-#        rm -f ./.depend
-#        $(CC) $(CFLAGS) -MM $^ >> ./.depend;
-
-#include .depend
-
 KERNELASM = loader init isr
 KERNELC = kmain idt gdt interrupt io kio
 KERNELOBJ = ${KERNELASM:=.o} ${KERNELC:=.o}
+KERNELSRC = ${KERNELASM:=.asm} ${KERNELC:=.c}
 
-all: wyvern.kernel
+all: depend wyvern.kernel
 
-wyvern.kernel: ${KERNELOBJ}
+depend: .depend
+.depend: ${KERNELC:=.c}
+	${RM} ./.depend
+	$(CC) $(CFLAGS) -MM $^ >> ./.depend;
+-include .depend
+
+wyvern.kernel: depend ${KERNELOBJ}
 	${KLD} ${KLDFLAGS} -T linker.ld -o $@ ${KERNELOBJ}
 
 .asm.o:
@@ -24,6 +23,7 @@ wyvern.kernel: ${KERNELOBJ}
 	${KCC} ${KCCFLAGS} -o $@ $<
 
 clean:
+	${RM} .depend
 	${RM} ${KERNELOBJ}
 	${RM} wyvern.kernel
 
