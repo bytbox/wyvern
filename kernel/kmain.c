@@ -14,6 +14,7 @@ void kmain() {
 	gdt_load_32((uint32_t)&gdt_ptr_32);
 	kwrite("Preparing IDT...");
 	idt_init();
+	kwrite("Loading IDT...");
 	idt_load_32((uint32_t)&idt_ptr_32);
 
 	kdraw(0, 10, "I await your orders...", 0x2F);

@@ -7,6 +7,8 @@ void interrupt_32(struct Register_State rs) {
 	kput(rs.int_no+'A');
 }
 
+char kbdmap[256] = "  1234567890-=\b\tQWERTYUIOP[]\r\nASDFGHJKL;'   ZXCVBNM";
+
 void irq_32(struct Register_State rs) {
 	// Send EOI
 	if (rs.int_no >= 40)
@@ -20,8 +22,9 @@ void irq_32(struct Register_State rs) {
 //	}
 	if (rs.err_code == 0) return;
 	if (rs.err_code == 1) {
-		inb(0x60);
-		kwrite("KBD");
+		uint8_t c = inb(0x60);
+		if (c < 0x80)
+			kput(kbdmap[c]);
 		return;
 	}
 	kput(rs.err_code + '0');

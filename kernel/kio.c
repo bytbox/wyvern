@@ -31,14 +31,19 @@ void kwrite(char *str) {
 		videoram[(_kwrite_line*160) + (c-str) * 2 + 1] = 0x0F;
 		c++;
 	}
+	uint8_t i;
+	for (i = c - str; i < 80; i++)
+		videoram[(_kwrite_line*160) + i * 2] = 0x00;
+		videoram[(_kwrite_line*160) + i * 2 + 1] = 0x0F;
+		
 	_kwrite_line++;
 	if (_kwrite_line >= 25) _kwrite_line = 20;
 	return;
 }
 
-char *putstr = "   ";
+char *putstr = "> <";
 void kput(char c) {
-	putstr[2] = c;
+	putstr[1] = c;
 	kwrite(putstr);
 }
 
