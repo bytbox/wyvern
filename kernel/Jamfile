@@ -1,6 +1,8 @@
 SubDir TOP kernel ;
 
-Kernel wyvern-$(VERSION) : loader.asm init.asm isr.asm kmain.c kio.c idt.c gdt.c interrupt.c io.c : linker.ld ;
+ARCHFILES = loader.asm init.asm isr.asm kmain.c idt.c gdt.c interrupt.c io.c ;
+
+Kernel wyvern-$(VERSION) : $(ARCHFILES) kio.c : linker.ld ;
 
 SubInclude TOP kernel arch ;
 

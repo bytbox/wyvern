@@ -3,7 +3,7 @@
 
 [GLOBAL remap_irq]
 [GLOBAL outb]
-;[GLOBAL inb]
+[GLOBAL inb]
 
 gdt_load_32:
 	mov	eax, [esp+4]
@@ -55,5 +55,12 @@ outb:
 	mov	dl, [esp+4]
 	mov	byte al, byte [esp+8]
 	out	dx, al
+	ret
+
+inb:
+	xor	edx, edx
+	xor	eax, eax
+	mov	dl, [esp+4]
+	in	al, dx
 	ret
 

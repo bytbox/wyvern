@@ -19,6 +19,11 @@ void irq_32(struct Register_State rs) {
 //	    handler(rs);
 //	}
 	if (rs.err_code == 0) return;
+	if (rs.err_code == 1) {
+		inb(0x60);
+		kwrite("KBD");
+		return;
+	}
 	kput(rs.err_code + '0');
 	kwrite("IRQ");
 }
