@@ -1,4 +1,0 @@
-SubDir TOP kernel arch ;
-
-SubInclude TOP kernel arch $(ARCH) ;
-

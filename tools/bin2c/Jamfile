@@ -1,4 +1,0 @@
-SubDir TOP tools bin2c ;
-
-Main bin2c : bin2c.c ;
-

@@ -1,4 +1,0 @@
-SubDir TOP tools mkdfl ;
-
-Main mkdfl : mkdfl.c ;
-
