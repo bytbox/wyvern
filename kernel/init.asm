@@ -46,12 +46,6 @@ remap_irq:
 	mov	al, 0xFF
 	out	0xA1, al
 
-	mov	al, 0x36
-	out	0x43, al
-	mov	ax, 0x1010
-	out	0x40, al
-	out	0x40, al
-
 	sti
 	ret
 
