@@ -52,6 +52,20 @@ actions Cat {
 }
 
 rule KObject {
+	Clean clean : $(<) ;
+
+	MakeLocate $(<) : $(LOCATE_TARGET) ;
+	SEARCH on $(>) = $(SEARCH_SOURCE) ;
+
+	HDRRULE on $(>) = HdrRule ;
+	HDRSCAN on $(>) = $(HDRPATTERN) ;
+	HDRSEARCH on $(>) = 
+		$(SEARCH_SOURCE:E) $(SUBDIRHDRS) $(HDRS) $(STDHDRS) ;
+
+	HDRGRIST on $(>) = $(HDRGRIST) ;
+
+	DEFINES on $(<) += $(DEFINES) ;
+
 	switch $(>:S)
 	{
 		case .c :	KCC $(<) : $(>) ;
