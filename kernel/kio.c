@@ -6,7 +6,8 @@ void kio_init() {
 	int x, y;
 	for (x=0; x<80; x++) {
 		for (y=0; y<20; y++) {
-			videoram[x*2+y*160] = 0;
+			videoram[x*2+y*160] = 0x00;
+			videoram[x*2+y*160+1] = 0x0F;
 		}
 	}
 }
