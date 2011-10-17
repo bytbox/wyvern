@@ -18,6 +18,7 @@ void irq_32(struct Register_State rs) {
 //	    isr_t handler = interrupt_handlers[rs.int_no];
 //	    handler(rs);
 //	}
+	if (rs.err_code == 0) return;
 	kput(rs.err_code + '0');
 	kwrite("IRQ");
 }
