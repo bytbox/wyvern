@@ -14,7 +14,7 @@ all: depend wyvern.kernel
 
 depend: ${KERNDIR}/.depend
 ${KERNDIR}/.depend: ${KERNELC:=.c}
-	$(KCC) $(KCCFLAGS) -MM $^ > $@;
+	$(KCC) $(KCCFLAGS) -MM ${KERNELC:=.c} > $@;
 -include ${KERNDIR}/.depend
 
 wyvern.kernel: ${KERNELOBJ}
