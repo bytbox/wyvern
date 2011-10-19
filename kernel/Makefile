@@ -12,11 +12,11 @@ KERNELSRC = ${KERNELASM:=.asm} ${KERNELC:=.c}
 
 all: depend wyvern.kernel
 
-depend: ${KERNDIR}/.depend
-${KERNDIR}/.depend: ${KERNELC:=.c}
+depend: .depend
+.depend: ${KERNELC:=.c}
 	@${RM} $@
 	$(foreach c, ${KERNELC}, $(KCC) $(KCCFLAGS) -MM ${c:=.c} -MT ${c:=.o} >> $@;)
--include ${KERNDIR}/.depend
+-include .depend
 
 wyvern.kernel: ${KERNELOBJ}
 	@${ECHO} "LD   $@"
