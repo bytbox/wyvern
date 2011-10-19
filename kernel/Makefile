@@ -14,7 +14,8 @@ all: depend wyvern.kernel
 
 depend: ${KERNDIR}/.depend
 ${KERNDIR}/.depend: ${KERNELC:=.c}
-	$(KCC) $(KCCFLAGS) -MM ${KERNELC:=.c} > $@;
+	@${RM} $@
+	$(foreach c, ${KERNELC}, $(KCC) $(KCCFLAGS) -MM ${c:=.c} -MT ${c:=.o} >> $@;)
 -include ${KERNDIR}/.depend
 
 wyvern.kernel: ${KERNELOBJ}
@@ -34,6 +35,8 @@ clean:
 	${RM} ${KERNELOBJ}
 	${RM} ${KERNDIR}/wyvern.kernel
 
-.PHONY: all clean depend
+distclean realclean clobber: clean
+
+.PHONY: all clean depend distclean realclean clobber
 .SUFFIXES: .c .o .asm
 
