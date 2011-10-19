@@ -1,5 +1,4 @@
-#ifndef LISP_PARSE_H
-#define LISP_PARSE_H
+#include "scam.h"
 
 struct List {
 
@@ -17,5 +16,4 @@ struct S_Expr {
 	} data;
 };
 
-#endif /* !LISP_PARSE_H */
 
