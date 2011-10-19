@@ -5,7 +5,7 @@ include ${BASEDIR}/make.config
 
 KERNELASM_LIST = loader init isr
 KERNELASM = $(foreach f, ${KERNELASM_LIST}, ${BASEDIR}/kernel/$f)
-KERNELC_LIST = kmain idt gdt interrupt io kio scam
+KERNELC_LIST = kmain idt gdt interrupt io kio
 KERNELC = $(foreach f, ${KERNELC_LIST}, ${BASEDIR}/kernel/$f)
 KERNELOBJ = ${KERNELASM:=.o} ${KERNELC:=.o}
 KERNELSRC = ${KERNELASM:=.asm} ${KERNELC:=.c}
